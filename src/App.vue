@@ -1,11 +1,12 @@
 <template>
     <h1 class="text-white py-3 font-bold text-center text-4xl bg-gradient-to-r from-pink-500 to-yellow-500">
-      The Joke's On You!
+        The Joke's On You!
     </h1>
 
     <hr />
 
     <div class="md:container mx-auto grid grid-cols-2 gap-4 mt-8">
+        <Filter class="col-span-2" @filterChange="filterChanged" />
         <div v-for="joke in jokes">
             <Joke :joke="joke" />
         </div>
@@ -15,20 +16,32 @@
 <script>
 import API from './api.js'
 import Joke from './components/Joke.vue'
-import { ref } from 'vue'
+import Filter from './components/Filter.vue'
 
 export default {
     components: {
         Joke,
+        Filter,
     },
-    setup() {
-        const jokes = ref([])
-
-        API.customJokes()
-            .then(({ data }) => (jokes.value = data.jokes))
-            .catch((error) => console.log('Error: ', error))
-
-        return { jokes }
+    data() {
+        return {
+            jokes: [],
+            customCategories: ['Any'],
+        }
+    },
+    methods: {
+        filterChanged(gege) {
+            this.customCategories = gege
+            this.getJokes()
+        },
+        getJokes() {
+            API.customJokes(this.customCategories)
+                .then(({ data }) => (this.jokes = data.jokes))
+                .catch((error) => console.log('Error: ', error))
+        },
+    },
+    mounted() {
+        this.getJokes()
     },
 }
 </script>

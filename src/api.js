@@ -1,15 +1,15 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'https://v2.jokeapi.dev/joke',
+    baseURL: 'https://v2.jokeapi.dev/joke',
 })
 
 export default {
     anyJokes(limit = 6) {
         return API.get('/Any', {
             params: {
-                amount: limit
-            }
+                amount: limit,
+            },
         })
     },
     customJokes(categories = ['Any'], flags = [''], limit = 6) {
@@ -18,8 +18,8 @@ export default {
         return API.get(`/${categoriesString}`, {
             params: {
                 amount: limit,
-                blacklistFlags: flagsString
-            }
+                blacklistFlags: flagsString,
+            },
         })
-    }
+    },
 }
